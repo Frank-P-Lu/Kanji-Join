@@ -4,10 +4,12 @@ import game.components.kanji.Kanji;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.IntStream;
 
 /*
 Essentially a chess board where radicals can be popped on.
-Co-ordinates: [x, y]. These are not zero indexed.
+Co-ordinates: [x, y]. These are zero indexed.
 Eventually, these should be mouse driven.
  [
     [(1,1), (2,1)],
@@ -28,14 +30,18 @@ public class Board {
 
     private void initBoard(){
         this.board = new ArrayList<>(numberRows);  // number of columns
-        for (int column = 0; column < numberRows; column++ ){
-            this.board.add(new ArrayList<>(numberColumns));
-        }
+        IntStream.range(0, numberRows).forEach(row -> {
+            ArrayList<Kanji> newRow = new ArrayList<>(numberColumns);
+            IntStream.range(0, numberColumns).forEach(column ->
+                    newRow.add(null)
+            );
+            this.board.add(newRow);
+        });
+
     }
 
     private Coordinate processCoordinates(int column, int row) throws InvalidCoordinateException{
         Coordinate coordinate = new Coordinate(column, row);
-        coordinate.standardiseIndices();
         if(!isValidCoordinate(coordinate)){
             throw new InvalidCoordinateException();
         }
@@ -54,12 +60,24 @@ public class Board {
     }
 
 
-    public Kanji get(int column, int row) throws InvalidCoordinateException{
+    public Kanji getKanji(int column, int row) throws InvalidCoordinateException{
         Coordinate coordinate = processCoordinates(column, row);
         return this.board.get(coordinate.column).get(coordinate.row);
     }
 
-    private static class Coordinate{
+    public List<List<Kanji>> getBoard() {
+        return board;
+    }
+
+    public int getNumberColumns() {
+        return numberColumns;
+    }
+
+    public int getNumberRows() {
+        return numberRows;
+    }
+
+    static class Coordinate{
         private int column;
         private int row;
 
@@ -68,11 +86,12 @@ public class Board {
             this.row = row;
         }
 
-        private void standardiseIndices() {
-            this.column--;
-            this.row--;
-        }
-
+//        private void standardiseIndices() {
+//            this.column--;
+//            this.row--;
+//        }
     }
 
+
 }
+

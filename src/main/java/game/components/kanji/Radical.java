@@ -1,4 +1,4 @@
 package game.components.kanji;
 
-public class Radical {
+public class Radical extends Placeable{
 }
