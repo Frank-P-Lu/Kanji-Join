@@ -85,13 +85,6 @@ public class Board {
             this.column = column;
             this.row = row;
         }
-
-//        private void standardiseIndices() {
-//            this.column--;
-//            this.row--;
-//        }
     }
-
-
 }
 

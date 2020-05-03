@@ -21,6 +21,7 @@ class ComponentsFixture {
         Board board = new Board(5, 5);
         try {
             board.addItem(random.nextInt(5),  random.nextInt(5), generateRandomKanji());
+            board.addItem(random.nextInt(5),  random.nextInt(5), generateRandomKanji());
         } catch (InvalidCoordinateException e) {
             e.printStackTrace();
         }

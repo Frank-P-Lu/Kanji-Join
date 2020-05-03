@@ -1,9 +1,9 @@
 package game.components;
 
-import game.components.placeables.Kanji;
 import game.components.placeables.Placeable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -20,19 +20,43 @@ public class BoardPrinterCommandLine implements BoardPrinter{
     @Override
     public void printBoard() {
         // The output of the board with format [ ["Row1 string"], ["Row2 string"]
-        // This is so we can format each row seperately
         String output = IntStream.range(0, board.getNumberRows())
-            .mapToObj(rowNumber -> {
-                    List<String> rowOutput = new ArrayList<>();
-                    addRowIndicator(rowOutput, rowNumber);
-
-                    IntStream.range(0, board.getNumberColumns())
-                            .forEach(columnNumber -> addRowContents(rowOutput, getItem(columnNumber, rowNumber)));
-                    return String.join("", rowOutput);
-                })
-                .collect(Collectors.joining("\n"));
-
+            .mapToObj(this::makeOutputRows)  // to List< List<String>>
+            .flatMap(Collection::stream)  // flatten to List<String>
+            .collect(Collectors.joining("\n"))
+                + closingRows();
         System.out.println(output);
+    }
+
+    private List<String> makeOutputRows(int rowNumber) {
+        // creates 2 rows for every row on the board
+        List<String> rowOutput = new ArrayList<>();
+
+        // add separator row
+        String separatorRow = makeSeparatorRow();
+        rowOutput.add(separatorRow);
+
+        // add contents row
+        String contentRow = makeContentRow(rowNumber);
+        rowOutput.add(contentRow);
+
+        return rowOutput;
+    }
+
+    private String makeSeparatorRow() {
+        return repeat(ROW_AND_COLUMN_SPACING, " ") + "*" + repeat(board.getNumberColumns(), " - - *");
+
+    }
+
+    private String makeContentRow(int rowNumber){
+        return makeRowIndicator(rowNumber) +
+                IntStream.range(0, board.getNumberColumns())
+                    .mapToObj(columnNumber -> getPlaceableContent(getItem(columnNumber, rowNumber)))
+                    .collect(Collectors.joining());
+    }
+
+    private String makeRowIndicator(int rowNumber){
+        return rowNumber + repeat(ROW_AND_COLUMN_SPACING - 1, " ") + "|";
     }
 
     private Placeable getItem(int column, int row){
@@ -44,11 +68,23 @@ public class BoardPrinterCommandLine implements BoardPrinter{
         }
     }
 
-    private void addRowIndicator(List<String> row, int rowNumber){
-        row.add(rowNumber + "  |");
+    private String getPlaceableContent(Placeable item) {
+        return "  " + item.toString() + "  |";
     }
 
-    private void addRowContents(List<String> rowOutput, Placeable item) {
-        rowOutput.add("  " + item.toString() + "  |");
+    private String closingRows() {
+        return "\n" + makeSeparatorRow() + "\n" + makeColumnIndicator();
+    }
+
+    private String makeColumnIndicator() {
+        return repeat(ROW_AND_COLUMN_SPACING + 1, " ") +
+                IntStream.range(0, board.getNumberColumns())
+                        .mapToObj(columnNumber -> "  " + columnNumber + "   ")
+                        .collect(Collectors.joining());
+    }
+
+
+    private static String repeat(int count, String with) {
+        return new String(new char[count]).replace("\0", with);
     }
 }
