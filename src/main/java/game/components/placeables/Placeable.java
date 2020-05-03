@@ -1,4 +1,4 @@
-package game.components.kanji;
+package game.components.placeables;
 
 public abstract class Placeable {
     /*

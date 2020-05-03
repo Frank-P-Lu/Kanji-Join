@@ -1,6 +1,6 @@
 package game.components;
 
-import game.components.kanji.Kanji;
+import game.components.placeables.Kanji;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,10 +25,10 @@ class BoardTest {
         Kanji kanji = new Kanji();
 
         // when
-        board.addKanji(3, 2, kanji);
+        board.addItem(3, 2, kanji);
 
         // then
-        assertSame(board.getKanji(3, 2), kanji);
+        assertSame(board.getBoardItem(3, 2), kanji);
     }
 
     @Test
@@ -41,7 +41,7 @@ class BoardTest {
         // when
         IntStream.range(0, 3).forEach(i -> exceptions.add(
                 assertThrows(InvalidCoordinateException.class,
-                        () -> board.getKanji(invalidCols[i], invalidRows[i]))));
+                        () -> board.getBoardItem(invalidCols[i], invalidRows[i]))));
 
         // then
         exceptions.forEach(Assertions::assertNotNull);

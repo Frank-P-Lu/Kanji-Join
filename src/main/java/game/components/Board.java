@@ -1,10 +1,10 @@
 package game.components;
 
-import game.components.kanji.Kanji;
+import game.components.placeables.Blank;
+import game.components.placeables.Placeable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 
 /*
@@ -19,7 +19,7 @@ Eventually, these should be mouse driven.
 public class Board {
     private final int numberColumns;
     private final int numberRows;
-    private List<List<Kanji>> board;  // rows and columns
+    private List<List<Placeable>> board;  // rows and columns
 
 
     public Board(int numberColumns, int numberRows) {
@@ -31,9 +31,9 @@ public class Board {
     private void initBoard(){
         this.board = new ArrayList<>(numberRows);  // number of columns
         IntStream.range(0, numberRows).forEach(row -> {
-            ArrayList<Kanji> newRow = new ArrayList<>(numberColumns);
+            ArrayList<Placeable> newRow = new ArrayList<>(numberColumns);
             IntStream.range(0, numberColumns).forEach(column ->
-                    newRow.add(null)
+                    newRow.add(new Blank())
             );
             this.board.add(newRow);
         });
@@ -54,18 +54,18 @@ public class Board {
     }
 
 
-    public void addKanji(int column, int row, Kanji kanji) throws InvalidCoordinateException {
+    public void addItem(int column, int row, Placeable item) throws InvalidCoordinateException {
         Coordinate coordinate = processCoordinates(column, row);
-        this.board.get(coordinate.column).set(coordinate.row, kanji);
+        this.board.get(coordinate.column).set(coordinate.row, item);
     }
 
 
-    public Kanji getKanji(int column, int row) throws InvalidCoordinateException{
+    public Placeable getBoardItem(int column, int row) throws InvalidCoordinateException{
         Coordinate coordinate = processCoordinates(column, row);
         return this.board.get(coordinate.column).get(coordinate.row);
     }
 
-    public List<List<Kanji>> getBoard() {
+    public List<List<Placeable>> getBoard() {
         return board;
     }
 

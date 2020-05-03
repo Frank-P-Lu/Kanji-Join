@@ -1,6 +1,7 @@
 package game.components;
 
-import game.components.kanji.Kanji;
+import game.components.placeables.Kanji;
+import game.components.placeables.Placeable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,22 +21,23 @@ public class BoardPrinterCommandLine implements BoardPrinter{
     public void printBoard() {
         // The output of the board with format [ ["Row1 string"], ["Row2 string"]
         // This is so we can format each row seperately
-        List<String> output = IntStream.range(0, board.getNumberRows())
+        String output = IntStream.range(0, board.getNumberRows())
             .mapToObj(rowNumber -> {
                     List<String> rowOutput = new ArrayList<>();
                     addRowIndicator(rowOutput, rowNumber);
 
-                    IntStream.range(0, board.getNumberColumns()).forEach(columnNumber -> addRowContents(rowOutput, getKanji(columnNumber, rowNumber)));
+                    IntStream.range(0, board.getNumberColumns())
+                            .forEach(columnNumber -> addRowContents(rowOutput, getItem(columnNumber, rowNumber)));
                     return String.join("", rowOutput);
-                }).collect(Collectors.toList());
+                })
+                .collect(Collectors.joining("\n"));
 
-        String outputJoined = String.join("\n", output);
-        System.out.println(outputJoined);
+        System.out.println(output);
     }
 
-    private Kanji getKanji(int column, int row){
+    private Placeable getItem(int column, int row){
         try {
-            return board.getKanji(column, row);
+            return board.getBoardItem(column, row);
 
         } catch (InvalidCoordinateException e) {
             throw new RuntimeException("Invalid board state. Attempting to fetch from col:" + column + ", row:" + row);
@@ -46,7 +48,7 @@ public class BoardPrinterCommandLine implements BoardPrinter{
         row.add(rowNumber + "  |");
     }
 
-    private void addRowContents(List<String> rowOutput, Kanji kanji) {
-        rowOutput.add("  " + kanji.toString() + "  |");
+    private void addRowContents(List<String> rowOutput, Placeable item) {
+        rowOutput.add("  " + item.toString() + "  |");
     }
 }

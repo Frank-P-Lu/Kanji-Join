@@ -1,6 +1,6 @@
 package game.components;
 
-import game.components.kanji.Kanji;
+import game.components.placeables.Kanji;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +20,7 @@ class ComponentsFixture {
     static Board generateTestBoard(){
         Board board = new Board(5, 5);
         try {
-            board.addKanji(random.nextInt(5) + 1,  random.nextInt(5) + 1, generateRandomKanji());
+            board.addItem(random.nextInt(5),  random.nextInt(5), generateRandomKanji());
         } catch (InvalidCoordinateException e) {
             e.printStackTrace();
         }
