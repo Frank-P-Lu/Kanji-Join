@@ -1,4 +1,4 @@
-package game.components;
+package game.components.board;
 
 import game.components.placeables.Placeable;
 
@@ -29,14 +29,11 @@ public class BoardPrinterCommandLine implements BoardPrinter{
     }
 
     private List<String> makeOutputRows(int rowNumber) {
-        // creates 2 rows for every row on the board
         List<String> rowOutput = new ArrayList<>();
 
-        // add separator row
         String separatorRow = makeSeparatorRow();
         rowOutput.add(separatorRow);
 
-        // add contents row
         String contentRow = makeContentRow(rowNumber);
         rowOutput.add(contentRow);
 

@@ -1,5 +1,7 @@
 package game.components;
 
+import game.components.board.Board;
+import game.components.board.InvalidCoordinateException;
 import game.components.placeables.Kanji;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

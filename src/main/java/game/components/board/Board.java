@@ -1,4 +1,4 @@
-package game.components;
+package game.components.board;
 
 import game.components.placeables.Blank;
 import game.components.placeables.Placeable;

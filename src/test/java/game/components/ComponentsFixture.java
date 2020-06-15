@@ -1,5 +1,7 @@
 package game.components;
 
+import game.components.board.Board;
+import game.components.board.InvalidCoordinateException;
 import game.components.placeables.Kanji;
 
 import java.util.Arrays;
